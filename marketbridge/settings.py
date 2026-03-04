@@ -1,4 +1,3 @@
-
 """
 Django settings for marketbridge project.
 
@@ -24,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-c-*aphzvz1hkh6%jrxf=tw#zf02@#)&4jd(&pp4s@rpgs(m-%b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', '0.0.0.0']
 
