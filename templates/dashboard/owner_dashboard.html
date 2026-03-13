@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Owner Dashboard</title>
+</head>
+<body>
+    <h1>{{ shop.shop_name }} - Dashboard</h1>
+    
+    <h2>Shop Statistics</h2>
+    <p>Total Products: {{ total_products }}</p>
+    <p>Total Sales: ${{ total_sales }}</p>
+    
+    <h2>Products</h2>
+    {% if products %}
+        <ul>
+        {% for product in products %}
+            <li>{{ product.name }} - Stock: {{ product.stock }} - ${{ product.price }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No products yet.</p>
+    {% endif %}
+    
+    <a href="{% url 'home' %}">Back Home</a>
+</body>
+</html>

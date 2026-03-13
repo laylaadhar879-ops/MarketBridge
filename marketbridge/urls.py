@@ -16,18 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from market import views
-from products import views as product_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('signup/', views.signup, name='signup'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('', views.shop_list, name='home'),
     path('shops/', views.shop_list, name='shop_list'),
     path('shops/<int:shop_id>/', views.shop_detail, name='shop_detail'),
     path('products/<int:product_id>/', views.product_detail, name='product_detail'),
+    path('products/external/', views.external_products, name='external_products'),
     path('orders/create/<int:product_id>/', views.create_order, name='create_order'),
     path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
     path('orders/', views.user_orders, name='user_orders'),
     path('payments/create/<int:order_id>/', views.create_payment, name='create_payment'),
     path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
-    path('products/external/', product_views.external_products, name='external_products'),
 ]

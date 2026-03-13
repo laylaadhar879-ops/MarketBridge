@@ -55,7 +55,7 @@ ROOT_URLCONF = 'marketbridge.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,14 +76,23 @@ WSGI_APPLICATION = 'marketbridge.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'rise_quack_gown_751974',
+        'USER': 'neondb_owner',
+        'PASSWORD': 'npg_AHCbuM0Dth8k',
+        'HOST': 'ep-dawn-bonus-agc3gcsw.c-2.eu-central-1.aws.neon.tech',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
 
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+
+AUTH_USER_MODEL = 'market.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -119,6 +128,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

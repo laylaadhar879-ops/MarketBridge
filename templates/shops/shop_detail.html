@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ shop.shop_name }}</title>
+</head>
+<body>
+    <h1>{{ shop.shop_name }}</h1>
+    <p>{{ shop.description }}</p>
+    <p>Address: {{ shop.address }}</p>
+    
+    <h2>Products</h2>
+    {% if products %}
+        <ul>
+        {% for product in products %}
+            <li>
+                <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                - ${{ product.price }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No products available.</p>
+    {% endif %}
+    
+    <a href="{% url 'home' %}">Back to Shops</a>
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-text">
+        <h1>Welcome to MarketBridge</h1>
+        <p>Discover products from independent shops all in one marketplace.</p>
+        <a href="{% url 'shop_list' %}" class="btn-primary">Browse Shops</a>
+    </div>
+</section>
+
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+    <h2>How It Works</h2>
+
+    <div class="steps">
+
+        <div class="step">
+            <h3>1. Browse Shops</h3>
+            <p>Explore different shops and find unique products.</p>
+        </div>
+
+        <div class="step">
+            <h3>2. Add to Cart</h3>
+            <p>Select products and add them to your shopping cart.</p>
+        </div>
+
+        <div class="step">
+            <h3>3. Checkout Securely</h3>
+            <p>Complete your purchase with our secure payment system.</p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- FEATURES -->
+<section class="features">
+
+    <h2>Features</h2>
+
+    <div class="feature-grid">
+
+        <div class="feature">
+            <h3>Multiple Shops</h3>
+            <p>Shop from multiple independent sellers.</p>
+        </div>
+
+        <div class="feature">
+            <h3>Secure Payments</h3>
+            <p>Safe checkout with trusted payment systems.</p>
+        </div>
+
+        <div class="feature">
+            <h3>Easy Order Tracking</h3>
+            <p>Track your purchases easily.</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© 2026 MarketBridge</p>
+</footer>
+
+{% endblock %}
