@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="basket-card">
+    <h2 class="basket-title">Your Basket</h2>
+    <p class="basket-text">Your basket is currently empty.</p>
+    <p class="basket-text">Browse products and add items to see them here.</p>
+    <a href="{% url 'external_products' %}" class="basket-link">Browse Products</a>
+</section>
+{% endblock %}

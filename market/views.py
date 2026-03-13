@@ -151,16 +151,31 @@ def owner_dashboard(request):
 
 
 def external_products(request):
+    search_query = request.GET.get('q', '').strip()
     products = []
     error_message = None
 
     try:
         response = requests.get('https://fakestoreapi.com/products', timeout=10)
         products = response.json()
+
+        if search_query:
+            query = search_query.lower()
+            products = [
+                product for product in products
+                if query in product.get('title', '').lower()
+                or query in product.get('category', '').lower()
+            ]
     except requests.RequestException:
         error_message = 'Could not load external products right now. Please try again.'
 
     return render(request, 'products/external_products.html', {
         'products': products,
         'error_message': error_message,
+        'search_query': search_query,
     })
+
+
+@login_required
+def basket(request):
+    return render(request, 'orders/basket.html')

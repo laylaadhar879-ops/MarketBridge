@@ -1,140 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>External Products</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+{% extends 'base.html' %}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f8fbff 0%, #eef2ff 100%);
-            color: #1f2937;
-        }
-
-        .page {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 32px 20px 48px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 2rem;
-            color: #111827;
-        }
-
-        .header p {
-            margin-top: 10px;
-            color: #4b5563;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-
-        .back-link {
-            text-decoration: none;
-            background: #111827;
-            color: #ffffff;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-        }
-
-        .back-link:hover {
-            background: #1f2937;
-        }
-
-        .error {
-            margin: 0 auto 20px;
-            max-width: 700px;
-            padding: 12px 14px;
-            border-radius: 10px;
-            border: 1px solid #fecaca;
-            background: #fef2f2;
-            color: #991b1b;
-            text-align: center;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 18px;
-        }
-
-        .product-card {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 16px;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-            border: 1px solid #e5e7eb;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
-        }
-
-        .product-title {
-            margin: 0;
-            font-size: 1rem;
-            line-height: 1.4;
-            color: #111827;
-            min-height: 46px;
-        }
-
-        .product-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .price {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #065f46;
-        }
-
-        .category {
-            font-size: 0.8rem;
-            background: #ede9fe;
-            color: #5b21b6;
-            padding: 5px 10px;
-            border-radius: 999px;
-            text-transform: capitalize;
-            white-space: nowrap;
-        }
-
-        .empty {
-            text-align: center;
-            color: #6b7280;
-            background: #ffffff;
-            border: 1px dashed #d1d5db;
-            border-radius: 12px;
-            padding: 18px;
-        }
-    </style>
-</head>
-<body>
-    <div class="page">
+{% block content %}
+    <div class="page products-page">
         <div class="header">
-            <h1>External Products API</h1>
-            <p>Fresh products from Fake Store API displayed in a modern catalog layout.</p>
+            <h1>Products</h1>
+            <p>Discover our latest collection of products.</p>
         </div>
 
         <div class="actions">
@@ -161,5 +31,4 @@
             <p class="empty">No external products available.</p>
         {% endif %}
     </div>
-</body>
-</html>
+{% endblock %}
