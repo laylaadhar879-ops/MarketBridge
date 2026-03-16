@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container py-4">
 <section class="auth-card auth-card-signup">
     <h2 class="auth-title">Create Account</h2>
     <p class="auth-subtitle">Sign up to start using MarketBridge.</p>
@@ -38,4 +39,5 @@
         <a href="{% url 'login' %}" class="auth-switch-link">Log in</a>
     </p>
 </section>
+</div>
 {% endblock %}

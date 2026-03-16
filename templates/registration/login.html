@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container py-4">
 <section class="auth-card auth-card-login">
     <h2 class="auth-title">Login</h2>
     <p class="auth-subtitle">Sign in to continue.</p>
@@ -33,4 +34,5 @@
         <a href="{% url 'signup' %}" class="auth-switch-link">Sign up</a>
     </p>
 </section>
+</div>
 {% endblock %}

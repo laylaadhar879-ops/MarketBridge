@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="page products-page">
+    <div class="container py-4">
         <div class="header">
             <h1>Products</h1>
             <p>Discover our latest collection of products.</p>
@@ -15,20 +15,91 @@
             <div class="error">{{ error_message }}</div>
         {% endif %}
 
+        <!-- FILTER BAR -->
+        <form method="get" action="{% url 'external_products' %}" class="filter-bar">
+            <div class="row g-2 align-items-end">
+
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <label class="filter-label">Search</label>
+                    <input type="text" name="q" value="{{ search_query }}" placeholder="Search products..." class="filter-input">
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <label class="filter-label">Category</label>
+                    <select name="category" class="filter-input">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat }}" {% if cat == category_filter %}selected{% endif %}>{{ cat|title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-6 col-lg-2">
+                    <label class="filter-label">Min Price ($)</label>
+                    <input type="number" name="min_price" value="{{ min_price }}" placeholder="0" min="0" step="0.01" class="filter-input">
+                </div>
+
+                <div class="col-6 col-lg-2">
+                    <label class="filter-label">Max Price ($)</label>
+                    <input type="number" name="max_price" value="{{ max_price }}" placeholder="Any" min="0" step="0.01" class="filter-input">
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-2">
+                    <label class="filter-label">Sort By</label>
+                    <select name="sort" class="filter-input">
+                        <option value="">Default</option>
+                        <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                        <option value="name_asc" {% if sort_by == 'name_asc' %}selected{% endif %}>Name: A–Z</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-sm-6 col-lg-1">
+                    <label class="filter-label">&nbsp;</label>
+                    <div class="filter-btn-group">
+                        <button type="submit" class="filter-btn"><i class="fa-solid fa-filter"></i> Filter</button>
+                        <a href="{% url 'external_products' %}" class="filter-reset" title="Clear filters"><i class="fa-solid fa-xmark"></i></a>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+        <p class="filter-count">Showing <strong>{{ products|length }}</strong> product{{ products|length|pluralize }}</p>
+
         {% if products %}
-            <div class="products-grid">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
                 {% for product in products %}
-                    <article class="product-card">
-                        <h2 class="product-title">{{ product.title }}</h2>
-                        <div class="product-meta">
-                            <span class="price">${{ product.price }}</span>
-                            <span class="category">{{ product.category }}</span>
-                        </div>
-                    </article>
+                    <div class="col">
+                        <article class="product-card h-100">
+                            <div class="product-img-wrap">
+                                <img src="{{ product.image }}" alt="{{ product.title }}" class="product-img">
+                            </div>
+                            <div class="p-3 d-flex flex-column flex-grow-1">
+                                <h2 class="product-title">{{ product.title }}</h2>
+                                <div class="product-meta mb-3">
+                                    <span class="price">${{ product.price }}</span>
+                                    <span class="category">{{ product.category }}</span>
+                                </div>
+                                <form method="post" action="{% url 'add_to_cart' %}" class="add-to-cart-form mt-auto">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    <input type="hidden" name="title" value="{{ product.title }}">
+                                    <input type="hidden" name="price" value="{{ product.price }}">
+                                    <input type="hidden" name="image" value="{{ product.image }}">
+                                    <div class="qty-row">
+                                        <label class="qty-label">Qty</label>
+                                        <input type="number" name="quantity" value="1" min="1" max="99" class="qty-input">
+                                        <button type="submit" class="add-btn"><i class="fa-solid fa-basket-shopping"></i> Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </article>
+                    </div>
                 {% endfor %}
             </div>
         {% else %}
-            <p class="empty">No external products available.</p>
+            <p class="empty">No products match your filters.</p>
         {% endif %}
     </div>
 {% endblock %}

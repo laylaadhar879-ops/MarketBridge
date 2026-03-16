@@ -1,10 +1,67 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="basket-card">
-    <h2 class="basket-title">Your Basket</h2>
-    <p class="basket-text">Your basket is currently empty.</p>
-    <p class="basket-text">Browse products and add items to see them here.</p>
-    <a href="{% url 'external_products' %}" class="basket-link">Browse Products</a>
-</section>
+<div class="container py-4">
+
+    <div class="basket-header">
+        <h2 class="basket-title"><i class="fa-solid fa-basket-shopping"></i> Your Basket</h2>
+        {% if cart_items %}
+            <span class="basket-count">{{ cart_items|length }} item{{ cart_items|length|pluralize }}</span>
+        {% endif %}
+    </div>
+
+    {% if cart_items %}
+        <div class="basket-layout">
+
+            <div class="basket-items">
+                {% for item in cart_items %}
+                <div class="basket-item">
+                    <img src="{{ item.image }}" alt="{{ item.title }}" class="basket-item-img">
+                    <div class="basket-item-info">
+                        <p class="basket-item-title">{{ item.title }}</p>
+                        <p class="basket-item-price">${{ item.price }} each</p>
+                    </div>
+                    <form method="post" action="{% url 'update_cart' item.id %}" class="basket-qty-form">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" class="basket-qty-input">
+                        <button type="submit" class="basket-update-btn">Update</button>
+                    </form>
+                    <p class="basket-line-total">${{ item.line_total }}</p>
+                    <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="basket-remove-btn" title="Remove"><i class="fa-solid fa-trash"></i></button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="basket-summary">
+                <h3>Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>${{ subtotal }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span class="text-success">Free</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <span>${{ subtotal }}</span>
+                </div>
+                <a href="#" class="checkout-btn"><i class="fa-solid fa-lock"></i> Checkout</a>
+                <a href="{% url 'external_products' %}" class="basket-continue">← Continue Shopping</a>
+            </div>
+
+        </div>
+    {% else %}
+        <div class="basket-empty">
+            <i class="fa-solid fa-basket-shopping basket-empty-icon"></i>
+            <h3>Your basket is empty</h3>
+            <p>Browse products and add items to see them here.</p>
+            <a href="{% url 'external_products' %}" class="basket-link">Browse Products</a>
+        </div>
+    {% endif %}
+
+</div>
 {% endblock %}

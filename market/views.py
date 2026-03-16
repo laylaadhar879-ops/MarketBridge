@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login as auth_login
 from django.db.models import Sum
 from .models import Shop, Product, Order, Payment
+from .forms import SignUpForm
 from decimal import Decimal
 import requests
 
@@ -22,13 +22,13 @@ def signup(request):
         return redirect('home')
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            auth_login(request, user)
+            auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
 
     return render(request, 'registration/signup.html', {'form': form})
 
@@ -152,20 +152,51 @@ def owner_dashboard(request):
 
 def external_products(request):
     search_query = request.GET.get('q', '').strip()
+    category_filter = request.GET.get('category', '').strip()
+    min_price = request.GET.get('min_price', '').strip()
+    max_price = request.GET.get('max_price', '').strip()
+    sort_by = request.GET.get('sort', '').strip()
     products = []
+    categories = []
     error_message = None
 
     try:
         response = requests.get('https://fakestoreapi.com/products', timeout=10)
         products = response.json()
 
+        # Build unique category list before filtering
+        categories = sorted(set(p.get('category', '') for p in products))
+
         if search_query:
             query = search_query.lower()
             products = [
-                product for product in products
-                if query in product.get('title', '').lower()
-                or query in product.get('category', '').lower()
+                p for p in products
+                if query in p.get('title', '').lower()
+                or query in p.get('category', '').lower()
             ]
+
+        if category_filter:
+            products = [p for p in products if p.get('category', '') == category_filter]
+
+        if min_price:
+            try:
+                products = [p for p in products if float(p.get('price', 0)) >= float(min_price)]
+            except ValueError:
+                pass
+
+        if max_price:
+            try:
+                products = [p for p in products if float(p.get('price', 0)) <= float(max_price)]
+            except ValueError:
+                pass
+
+        if sort_by == 'price_asc':
+            products = sorted(products, key=lambda p: float(p.get('price', 0)))
+        elif sort_by == 'price_desc':
+            products = sorted(products, key=lambda p: float(p.get('price', 0)), reverse=True)
+        elif sort_by == 'name_asc':
+            products = sorted(products, key=lambda p: p.get('title', '').lower())
+
     except requests.RequestException:
         error_message = 'Could not load external products right now. Please try again.'
 
@@ -173,9 +204,81 @@ def external_products(request):
         'products': products,
         'error_message': error_message,
         'search_query': search_query,
+        'categories': categories,
+        'category_filter': category_filter,
+        'min_price': min_price,
+        'max_price': max_price,
+        'sort_by': sort_by,
     })
 
 
 @login_required
 def basket(request):
-    return render(request, 'orders/basket.html')
+    cart = request.session.get('cart', {})
+    cart_items = []
+    subtotal = 0
+    for pid, item in cart.items():
+        line_total = float(item['price']) * int(item['quantity'])
+        subtotal += line_total
+        cart_items.append({
+            'id': pid,
+            'title': item['title'],
+            'price': item['price'],
+            'image': item['image'],
+            'quantity': item['quantity'],
+            'line_total': round(line_total, 2),
+        })
+    return render(request, 'orders/basket.html', {
+        'cart_items': cart_items,
+        'subtotal': round(subtotal, 2),
+    })
+
+
+@login_required
+def add_to_cart(request):
+    if request.method == 'POST':
+        pid = str(request.POST.get('product_id'))
+        title = request.POST.get('title', '')
+        price = request.POST.get('price', '0')
+        image = request.POST.get('image', '')
+        try:
+            quantity = max(1, int(request.POST.get('quantity', 1)))
+        except ValueError:
+            quantity = 1
+
+        cart = request.session.get('cart', {})
+        if pid in cart:
+            cart[pid]['quantity'] = cart[pid]['quantity'] + quantity
+        else:
+            cart[pid] = {'title': title, 'price': price, 'image': image, 'quantity': quantity}
+        request.session['cart'] = cart
+        request.session.modified = True
+    return redirect('basket')
+
+
+@login_required
+def remove_from_cart(request, product_id):
+    cart = request.session.get('cart', {})
+    cart.pop(str(product_id), None)
+    request.session['cart'] = cart
+    request.session.modified = True
+    return redirect('basket')
+
+
+@login_required
+def update_cart(request, product_id):
+    if request.method == 'POST':
+        cart = request.session.get('cart', {})
+        pid = str(product_id)
+        try:
+            quantity = int(request.POST.get('quantity', 1))
+        except ValueError:
+            quantity = 1
+        if pid in cart:
+            if quantity <= 0:
+                cart.pop(pid)
+            else:
+                cart[pid]['quantity'] = quantity
+        request.session['cart'] = cart
+        request.session.modified = True
+    return redirect('basket')

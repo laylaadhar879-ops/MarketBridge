@@ -4,69 +4,129 @@
 
 <!-- HERO SECTION -->
 <section class="hero">
+    <img src="https://cdn.mos.cms.futurecdn.net/DNCm9L7JhaHx3UJirwbeTT-600-80.jpg" alt="Hero" class="hero-img">
+    <div class="hero-overlay"></div>
     <div class="hero-text">
-        <h1>Welcome to MarketBridge</h1>
-        <p>Discover products from independent shops all in one marketplace.</p>
-        <a href="{% url 'shop_list' %}" class="btn-primary">Browse Shops</a>
+        <h1>Welcome to <span class="hero-brand">MarketBridge</span></h1>
+        <p>Discover unique products from independent shops — all in one place.</p>
+        <div class="hero-cta">
+            <a href="{% url 'external_products' %}" class="btn-hero-primary"><i class="fa-solid fa-bag-shopping"></i> Shop Now</a>
+            <a href="{% url 'signup' %}" class="btn-hero-outline"><i class="fa-solid fa-user-plus"></i> Get Started</a>
+        </div>
     </div>
 </section>
 
+<!-- STATS BANNER -->
+<section class="stats-banner">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <i class="fa-solid fa-store"></i>
+                    <h3>500+</h3>
+                    <p>Shops</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <i class="fa-solid fa-box-open"></i>
+                    <h3>10k+</h3>
+                    <p>Products</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <i class="fa-solid fa-users"></i>
+                    <h3>25k+</h3>
+                    <p>Customers</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <i class="fa-solid fa-star"></i>
+                    <h3>4.9</h3>
+                    <p>Avg Rating</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- HOW IT WORKS -->
 <section class="how-it-works">
-    <h2>How It Works</h2>
-
-    <div class="steps">
-
-        <div class="step">
-            <h3>1. Browse Shops</h3>
-            <p>Explore different shops and find unique products.</p>
+    <div class="container">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Start shopping in three easy steps</p>
         </div>
 
-        <div class="step">
-            <h3>2. Add to Cart</h3>
-            <p>Select products and add them to your shopping cart.</p>
-        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
 
-        <div class="step">
-            <h3>3. Checkout Securely</h3>
-            <p>Complete your purchase with our secure payment system.</p>
-        </div>
+            <div class="col">
+                <div class="step h-100 p-4">
+                    <div class="step-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <h3>1. Browse Shops</h3>
+                    <p>Explore different shops and find unique products from independent sellers.</p>
+                </div>
+            </div>
 
+            <div class="col">
+                <div class="step h-100 p-4">
+                    <div class="step-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+                    <h3>2. Add to Basket</h3>
+                    <p>Select products and add them to your basket with a single click.</p>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="step h-100 p-4">
+                    <div class="step-icon"><i class="fa-solid fa-lock"></i></div>
+                    <h3>3. Checkout Securely</h3>
+                    <p>Complete your purchase with our secure, trusted payment system.</p>
+                </div>
+            </div>
+
+        </div>
     </div>
 </section>
-
 
 <!-- FEATURES -->
 <section class="features">
-
-    <h2>Features</h2>
-
-    <div class="feature-grid">
-
-        <div class="feature">
-            <h3>Multiple Shops</h3>
-            <p>Shop from multiple independent sellers.</p>
+    <div class="container">
+        <div class="section-header">
+            <h2>Why Choose MarketBridge?</h2>
+            <p>Everything you need for a great shopping experience</p>
         </div>
 
-        <div class="feature">
-            <h3>Secure Payments</h3>
-            <p>Safe checkout with trusted payment systems.</p>
-        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
 
-        <div class="feature">
-            <h3>Easy Order Tracking</h3>
-            <p>Track your purchases easily.</p>
-        </div>
+            <div class="col">
+                <div class="feature h-100 p-4">
+                    <div class="feature-icon"><i class="fa-solid fa-shop"></i></div>
+                    <h3>Multiple Shops</h3>
+                    <p>Shop from hundreds of independent sellers all in one convenient marketplace.</p>
+                </div>
+            </div>
 
+            <div class="col">
+                <div class="feature h-100 p-4">
+                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>Secure Payments</h3>
+                    <p>Every transaction is protected with end-to-end encryption and fraud detection.</p>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="feature h-100 p-4">
+                    <div class="feature-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                    <h3>Easy Order Tracking</h3>
+                    <p>Track every purchase from confirmation to delivery in real time.</p>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </section>
-
-
-<!-- FOOTER -->
-<footer class="footer">
-    <p>© 2026 MarketBridge</p>
-</footer>
 
 {% endblock %}
