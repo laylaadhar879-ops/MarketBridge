@@ -144,3 +144,23 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment for Order #{self.order.id}"
+
+
+class CartItem(models.Model):
+    """Persists a user basket item in the database so it survives logout/login."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items')
+    product_id = models.CharField(max_length=50)
+    title = models.CharField(max_length=500)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.URLField(max_length=1000, blank=True)
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product_id')
+
+    def line_total(self):
+        return round(float(self.price) * self.quantity, 2)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.title[:40]} x{self.quantity}"

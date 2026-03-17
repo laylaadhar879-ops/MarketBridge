@@ -14,21 +14,27 @@
         {% endif %}
 
         <div class="auth-field">
-            <label for="id_username" class="auth-label">Username</label>
-            {{ form.username }}
-            {% if form.username.errors %}<div class="auth-field-error">{{ form.username.errors }}</div>{% endif %}
+            <label for="id_first_name" class="auth-label">First Name</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}<div class="auth-field-error">{{ form.first_name.errors }}</div>{% endif %}
         </div>
 
         <div class="auth-field">
-            <label for="id_password1" class="auth-label">Password</label>
-            {{ form.password1 }}
-            {% if form.password1.errors %}<div class="auth-field-error">{{ form.password1.errors }}</div>{% endif %}
+            <label for="id_last_name" class="auth-label">Last Name</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}<div class="auth-field-error">{{ form.last_name.errors }}</div>{% endif %}
         </div>
 
         <div class="auth-field">
-            <label for="id_password2" class="auth-label">Confirm Password</label>
-            {{ form.password2 }}
-            {% if form.password2.errors %}<div class="auth-field-error">{{ form.password2.errors }}</div>{% endif %}
+            <label for="id_email" class="auth-label">Email Address</label>
+            {{ form.email }}
+            {% if form.email.errors %}<div class="auth-field-error">{{ form.email.errors }}</div>{% endif %}
+        </div>
+
+        <div class="auth-field">
+            <label for="id_password" class="auth-label">Password</label>
+            {{ form.password }}
+            {% if form.password.errors %}<div class="auth-field-error">{{ form.password.errors }}</div>{% endif %}
         </div>
 
         <button type="submit" class="auth-submit-btn">Sign Up</button>

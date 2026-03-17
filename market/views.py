@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.db.models import Sum
-from .models import Shop, Product, Order, Payment
+from .models import Shop, Product, Order, Payment, CartItem
 from .forms import SignUpForm
 from decimal import Decimal
 import requests
@@ -214,23 +214,19 @@ def external_products(request):
 
 @login_required
 def basket(request):
-    cart = request.session.get('cart', {})
-    cart_items = []
-    subtotal = 0
-    for pid, item in cart.items():
-        line_total = float(item['price']) * int(item['quantity'])
-        subtotal += line_total
-        cart_items.append({
-            'id': pid,
-            'title': item['title'],
-            'price': item['price'],
-            'image': item['image'],
-            'quantity': item['quantity'],
-            'line_total': round(line_total, 2),
-        })
+    items = CartItem.objects.filter(user=request.user)
+    cart_items = [{
+        'id': item.product_id,
+        'title': item.title,
+        'price': item.price,
+        'image': item.image,
+        'quantity': item.quantity,
+        'line_total': item.line_total(),
+    } for item in items]
+    subtotal = round(sum(c['line_total'] for c in cart_items), 2)
     return render(request, 'orders/basket.html', {
         'cart_items': cart_items,
-        'subtotal': round(subtotal, 2),
+        'subtotal': subtotal,
     })
 
 
@@ -246,39 +242,32 @@ def add_to_cart(request):
         except ValueError:
             quantity = 1
 
-        cart = request.session.get('cart', {})
-        if pid in cart:
-            cart[pid]['quantity'] = cart[pid]['quantity'] + quantity
-        else:
-            cart[pid] = {'title': title, 'price': price, 'image': image, 'quantity': quantity}
-        request.session['cart'] = cart
-        request.session.modified = True
+        item, created = CartItem.objects.get_or_create(
+            user=request.user,
+            product_id=pid,
+            defaults={'title': title, 'price': price, 'image': image, 'quantity': quantity},
+        )
+        if not created:
+            item.quantity += quantity
+            item.save()
     return redirect('basket')
 
 
 @login_required
 def remove_from_cart(request, product_id):
-    cart = request.session.get('cart', {})
-    cart.pop(str(product_id), None)
-    request.session['cart'] = cart
-    request.session.modified = True
+    CartItem.objects.filter(user=request.user, product_id=str(product_id)).delete()
     return redirect('basket')
 
 
 @login_required
 def update_cart(request, product_id):
     if request.method == 'POST':
-        cart = request.session.get('cart', {})
-        pid = str(product_id)
         try:
             quantity = int(request.POST.get('quantity', 1))
         except ValueError:
             quantity = 1
-        if pid in cart:
-            if quantity <= 0:
-                cart.pop(pid)
-            else:
-                cart[pid]['quantity'] = quantity
-        request.session['cart'] = cart
-        request.session.modified = True
+        if quantity <= 0:
+            CartItem.objects.filter(user=request.user, product_id=str(product_id)).delete()
+        else:
+            CartItem.objects.filter(user=request.user, product_id=str(product_id)).update(quantity=quantity)
     return redirect('basket')
